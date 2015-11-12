@@ -55,7 +55,7 @@ call plug#begin('~/.vim/bundle')
 Plug 'jgdavey/tslime.vim'
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'ervandew/supertab'
-Plug 'scrooloose/syntastic'
+Plug 'benekastah/neomake'
 Plug 'moll/vim-bbye'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'vim-scripts/gitignore'
@@ -187,10 +187,8 @@ endtry
 " Enable syntax highlighting
 syntax enable
 
-" Adjust signscolumn and syntastic to match wombat
+" Adjust signscolumn to match wombat
 hi! link SignColumn LineNr
-hi! link SyntasticErrorSign ErrorMsg
-hi! link SyntasticWarningSign WarningMsg
 
 " Use pleasant but very visible search hilighting
 hi Search ctermfg=white ctermbg=173 cterm=none guifg=#ffffff guibg=#e5786d gui=none
@@ -222,7 +220,7 @@ endif
 set t_Co=256
 
 " Set utf8 as standard encoding and en_US as the standard language
-set encoding=utf8
+set encoding=utf-8
 
 " Use Unix as the standard file type
 set ffs=unix,dos,mac
@@ -319,7 +317,7 @@ noremap <c-l> <c-w>l
 nmap <silent> <leader><cr> :noh\|hi Cursor guibg=red<cr>
 augroup haskell
   autocmd!
-  autocmd FileType haskell map <silent> <leader><cr> :noh<cr>:GhcModTypeClear<cr>:SyntasticReset<cr>
+  autocmd FileType haskell map <silent> <leader><cr> :noh<cr>:GhcModTypeClear<cr>
   autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
 augroup END
 
@@ -599,7 +597,7 @@ nmap <silent> <leader>ht :GhcModType<CR>
 " Insert type of expression under cursor
 nmap <silent> <leader>hT :GhcModTypeInsert<CR>
 " GHC errors and warnings
-nmap <silent> <leader>hc :SyntasticCheck hdevtools<CR>
+nmap <silent> <leader>hc :Neomake hdevtools<CR>
 
 " Fix path issues from vim.wikia.com/wiki/Set_working_directory_to_the_current_file
 let s:default_path = escape(&path, '\ ') " store default value of 'path'
@@ -614,11 +612,18 @@ autocmd BufRead *
 
 
 " Haskell Lint
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['haskell'] }
-nmap <silent> <leader>hl :SyntasticCheck hlint<CR>
+" let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['haskell'] }
+nmap <silent> <leader>hl :Neomake hlint<CR>
 
-" Options for Haskell Syntax Check
-let g:syntastic_haskell_hdevtools_args = '-g-Wall'
+" Neomake signs
+let g:neomake_error_sign = {
+        \ 'text': 'E>',
+        \ 'texthl': 'ErrorMsg',
+        \ }
+let g:neomake_warning_sign = {
+        \ 'text': 'W>',
+        \ 'texthl': 'WarningMsg',
+        \ }
 
 " Hoogle the word under the cursor
 nnoremap <silent> <leader>hh :Hoogle<CR>
