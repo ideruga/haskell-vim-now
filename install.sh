@@ -89,7 +89,7 @@ if [ ! -e $HOME/.vim/autoload/plug.vim ]; then
 fi
 
 msg "Installing plugins using vim-plug..."
-vim -T dumb -E -u $endpath/.vimrc +PlugUpgrade! +PlugInstall! +PlugClean! +qall
+vim -T dumb -E -u $endpath/.vimrc +PlugUpgrade +PlugInstall! +PlugClean! +qall
 
 msg "Setting up GHC if needed"
 stack setup
