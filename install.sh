@@ -130,10 +130,6 @@ if [ ! -e $DESTINATION/.vim/autoload/plug.vim ]; then
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 fi
 
-if [ ! -e $DESTINATION/local ]; then
-  mkdir $DESTINATION/local
-fi
-
 msg "Creating symlinks"
 detail "~/.vimrc -> $DESTINATION/.vimrc"
 detail "~/.vim   -> $DESTINATION/.vim"
