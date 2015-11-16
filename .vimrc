@@ -85,7 +85,7 @@ Plug 'majutsushi/tagbar'
 
 " Text manipulation
 Plug 'vim-scripts/Align'
-Plug 'vim-scripts/Gundo'
+Plug 'simnalamburt/vim-mundo'
 Plug 'tpope/vim-commentary'
 Plug 'godlygeek/tabular'
 Plug 'michaeljsmith/vim-indent-object'
