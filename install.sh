@@ -109,7 +109,7 @@ if [ ! -e $DESTINATION/.git ]; then
 else
   msg "Existing installation detected"
   msg "Updating from begriffs/haskell-vim-now"
-  cd $DESTINATION && git pull
+  cd $DESTINATION && git pull --rebase
 fi
 
 if [ -e ~/.vim/colors ]; then
