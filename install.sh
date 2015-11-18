@@ -60,8 +60,27 @@ if [ -z ${XDG_CONFIG_HOME+x} ]; then
 else
   msg "XDG_CONFIG_HOME is set to $XDG_CONFIG_HOME"
 fi
-
 DESTINATION="$XDG_CONFIG_HOME/haskell-vim-now"
+
+if [ -e $HOME/.haskell-vim-now ]; then
+  msg "Migrating existing installation to $DESTINATION"
+  mv -fu $HOME/.haskell-vim-now $DESTINATION
+  mv -fu $HOME/.vimrc.local $DESTINATION/vimrc.local
+  mv -fu $HOME/.vimrc.local.pre $DESTINATION/vimrc.local.pre
+  sed -i.bak "s/Plugin '/Plug '/g" $HOME/.vim.local/bundles.vim
+  mv -fu $HOME/.vim.local/bundles.vim $DESTINATION/plugins.local
+  rm -f $HOME/.vim.local/bundles.vim.bak
+  rmdir $HOME/.vim.local
+fi
+
+if [ ! -e $DESTINATION/.git ]; then
+  msg "Cloning begriffs/haskell-vim-now"
+  git clone https://github.com/begriffs/haskell-vim-now.git $DESTINATION
+else
+  msg "Existing installation detected"
+  msg "Updating from begriffs/haskell-vim-now"
+  cd $DESTINATION && git pull --rebase
+fi
 
 msg "Setting up GHC if needed"
 stack setup --verbosity warning
@@ -97,26 +116,6 @@ tagsCmd: hasktags --extendedctag --ignore-close-implementation --ctags --tags-ab
 EOF
 
 ## Vim configuration steps
-
-if [ -e $HOME/.haskell-vim-now ]; then
-  msg "Migrating existing installation to $DESTINATION"
-  mv -fu $HOME/.haskell-vim-now $DESTINATION
-  mv -fu $HOME/.vimrc.local $DESTINATION/vimrc.local
-  mv -fu $HOME/.vimrc.local.pre $DESTINATION/vimrc.local.pre
-  sed -i.bak "s/Plugin/Plug/g" $HOME/.vim.local/bundles.vim
-  mv -fu $HOME/.vim.local/bundles.vim $DESTINATION/plugins.local
-  rm -f $HOME/.vim.local/bundles.vim.bak
-  rmdir $HOME/.vim.local
-fi
-
-if [ ! -e $DESTINATION/.git ]; then
-  msg "Cloning begriffs/haskell-vim-now"
-  git clone https://github.com/begriffs/haskell-vim-now.git $DESTINATION
-else
-  msg "Existing installation detected"
-  msg "Updating from begriffs/haskell-vim-now"
-  cd $DESTINATION && git pull --rebase
-fi
 
 if [ -e ~/.vim/colors ]; then
   msg "Preserving color scheme files"
